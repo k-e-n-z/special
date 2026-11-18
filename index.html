@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1E293B">
+<title>PROJECT PRIVATE ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--charcoal:#1E293B;--ochre:#CFAF83;--sage:#9D886B;--plum:#475368;--cream:#F3E8D7;--ink:#202838;--gold:#D8B98D;--muted:#b9ad9b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--charcoal);color:var(--cream);font-family:'Cairo',sans-serif;overflow-x:hidden}
+button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.7;background-image:radial-gradient(1px 1px at 20px 30px,#f5dfbd 98%,transparent),radial-gradient(1px 1px at 80px 110px,#f5dfbd 98%,transparent),radial-gradient(1.5px 1.5px at 160px 70px,#d6bd9a 98%,transparent),radial-gradient(1px 1px at 240px 180px,#f5dfbd 98%,transparent);background-size:280px 220px;animation:drift 45s linear infinite}
+@keyframes drift{to{transform:translateY(-220px)}}@keyframes float{50%{transform:translateY(-9px)}}@keyframes glow{50%{box-shadow:0 0 28px #cfaf8355}}@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}@keyframes fly{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+main,.screen{position:relative;z-index:1}.screen{min-height:100vh;padding:30px 5vw;display:flex;align-items:center;justify-content:center}
+.panel{width:min(950px,100%);background:linear-gradient(145deg,#263348ed,#172131f5);border:1px solid #cfaf8370;border-radius:24px;box-shadow:0 25px 90px #080d18a6;position:relative;overflow:hidden}
+.panel:before{content:"";position:absolute;inset:9px;border:1px solid #cfaf8338;border-radius:17px;pointer-events:none}
+.eyebrow{letter-spacing:3px;color:var(--ochre);font-size:.76rem;text-transform:uppercase}
+.serif{font-family:'Amiri',serif}.gold{color:var(--ochre)}.muted{color:#c1b7a8}.center{text-align:center}
+.primary,.secondary{border:1px solid var(--ochre);border-radius:999px;padding:12px 25px;transition:.25s}
+.primary{background:var(--ochre);color:#1e293b;font-weight:800;box-shadow:0 7px 24px #cfaf8340}.primary:hover{transform:translateY(-3px);box-shadow:0 10px 32px #cfaf8370}
+.secondary{background:transparent;color:var(--cream)}.secondary:hover{background:#cfaf8320}
+input[type=password],input[type=text]{width:min(340px,100%);background:#111b2a;border:1px solid #cfaf8377;color:var(--cream);border-radius:12px;padding:13px 16px;outline:none;text-align:center}
+input:focus{border-color:var(--ochre);box-shadow:0 0 0 3px #cfaf8320}
+.mascot{width:145px;height:145px;object-fit:contain;border-radius:24px;background:#fff;box-shadow:0 0 0 5px #cfaf8330;animation:float 4s ease-in-out infinite}
+.mascot.small{width:86px;height:86px;border-radius:18px}
+.gate-card{padding:58px 24px;text-align:center;max-width:600px}.gate-card h1{font-size:clamp(2rem,6vw,4rem);margin:12px 0}.gate-card .mascot{margin:15px auto 24px}
+.error{color:#efc5b7;min-height:28px;margin-top:10px}.gate-stars{font-size:1.3rem;color:var(--ochre);letter-spacing:12px}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:12px 5vw;background:#111a28d9;backdrop-filter:blur(12px);border-bottom:1px solid #cfaf8330}
+.brand{font-family:'Amiri',serif;font-size:1.35rem;color:var(--ochre);letter-spacing:1px}.topbar nav{display:flex;gap:18px;flex-wrap:wrap}.topbar a{color:var(--cream);text-decoration:none;font-size:.85rem}.topbar a:hover{color:var(--ochre)}
+#experience{padding-top:75px}.section{padding:85px 5vw;min-height:90vh;display:flex;align-items:center;justify-content:center;scroll-margin-top:65px}
+.ticket{max-width:920px;padding:35px;display:grid;grid-template-columns:1.3fr .7fr;gap:25px;background:linear-gradient(120deg,#e9d9c2,#cfae80);color:#263143;border:7px double #8b704f;border-radius:18px;transform:rotate(-1deg);box-shadow:0 30px 70px #080d18aa;position:relative}
+.ticket:after{content:"";position:absolute;top:0;bottom:0;right:67%;border-right:2px dashed #7e684d}
+.ticket h2{font-size:clamp(2rem,5vw,3.4rem);margin:0}.ticket .eyebrow{color:#66523e}.ticket-side{border-right:1px solid #8b704f;padding-right:22px;display:flex;flex-direction:column;justify-content:space-between}
+.ticket-info{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:22px}.ticket-info small{display:block;color:#6d5b49}.ticket-info strong{font-size:1.1rem}.barcode{height:45px;width:100%;background:repeating-linear-gradient(90deg,#263143 0 2px,transparent 2px 4px,#263143 4px 7px,transparent 7px 10px);opacity:.8}
+.section-wrap{width:min(1050px,100%)}.section-title{font-family:'Amiri',serif;font-size:clamp(2.2rem,5vw,3.6rem);margin:0 0 8px}.ornament{color:var(--ochre);letter-spacing:9px;margin:12px 0 28px}
+#map{height:390px;border:1px solid #cfaf8370;border-radius:18px;z-index:2;overflow:hidden}.map-note{font-size:.85rem;color:#c8bba9;margin:12px 0}
+.flight-box{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:center}.flight-story{display:flex;gap:18px;align-items:center;background:#ffffff09;border:1px solid #cfaf8340;border-radius:18px;padding:18px;margin:18px 0}.flight-story p{margin:0}.progress{height:8px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:18px 0}.progress span{display:block;height:100%;width:0;background:var(--ochre);transition:width 1s linear}
+.question-card{max-width:760px;margin:auto;padding:35px}.question-number{color:var(--ochre);letter-spacing:3px}.question-card h3{font-family:'Amiri',serif;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.6;margin:10px 0 24px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{background:#f2e5d4;color:#273246;border:1px solid #cfaf83;border-radius:12px;padding:14px 12px;min-height:58px;transition:.2s}.answer:hover{transform:translateY(-2px);background:#d9c09f}.answer:disabled{opacity:.6;cursor:default}
+.feedback{min-height:130px;display:flex;align-items:center;gap:18px;margin-top:22px;padding:12px;border-radius:16px;background:#ffffff09}.feedback img{width:105px;height:105px;object-fit:contain;border-radius:15px;background:#fff}.feedback p{font-size:1.15rem;margin:0}.feedback.good{border:1px solid #a9c29b}.feedback.bad{border:1px solid #d5a99c}
+.sequence-area{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:18px 0}.chip{border:1px solid var(--ochre);background:#f2e5d4;color:#263143;padding:10px 13px;border-radius:999px}.chip.selected{background:var(--ochre);outline:2px solid #fff4}.sequence-result{min-height:52px;border:1px dashed #cfaf8370;border-radius:12px;padding:12px;margin:14px 0;color:var(--ochre)}
+.stage{min-height:480px;border-radius:22px;border:1px solid #cfaf8360;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 25%,#52617a,#1e293b 65%);display:flex;align-items:end;justify-content:center;padding:35px}
+.stage:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 5%,#f3e1bd25,transparent 35%),linear-gradient(transparent 50%,#111827 100%)}
+.stage-lights{position:absolute;top:0;left:10%;right:10%;height:100%;background:repeating-linear-gradient(100deg,transparent 0 70px,#cfaf8314 72px 74px,transparent 76px 150px);animation:glow 5s infinite}
+.stage-content{position:relative;text-align:center;z-index:2}.stage h3{font-family:'Amiri',serif;font-size:clamp(2rem,6vw,4rem);margin:5px}.stage .spot{font-size:4rem;color:var(--ochre);text-shadow:0 0 35px #cfaf83}
+.song-panel{background:#111a28c9;border:1px solid #cfaf8355;border-radius:14px;padding:15px;max-width:520px;margin:18px auto}
+input[type=file]{max-width:100%;font-size:.8rem;color:var(--muted)}
+.bus-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:25px;align-items:center}
+.timeline{position:relative;margin:35px 0;padding:0 25px}.timeline:before{content:"";position:absolute;right:35px;top:10px;bottom:10px;width:2px;background:linear-gradient(var(--ochre),#9d886b55)}
+.memory{position:relative;margin:25px 0 25px 0;padding:18px 65px 18px 18px;background:#ffffff09;border:1px solid #cfaf8340;border-radius:15px;min-height:95px}
+.memory:before{content:"✦";position:absolute;right:22px;top:25px;color:var(--ochre);font-size:1.5rem}.memory small{color:var(--ochre);letter-spacing:2px}
+.letter{max-width:780px;background:#eadcc8;color:#263143;padding:clamp(25px,5vw,55px);border-radius:5px;box-shadow:0 20px 65px #080d18aa;position:relative;line-height:2.15;font-size:1.05rem;border:8px double #a88a64}
+.letter h2{text-align:center;font-family:'Amiri',serif;font-size:2.5rem;margin:0 0 20px}.letter p{white-space:pre-line;margin:0}.letter .signature{text-align:left;margin-top:22px;font-family:'Amiri',serif;font-size:1.5rem}
+.footer{text-align:center;padding:25px;color:#b7aa97;font-size:.8rem}
+@media(max-width:720px){.topbar{align-items:flex-start}.topbar nav{gap:8px}.topbar a{font-size:.72rem}.ticket{grid-template-columns:1fr;transform:none;padding:25px}.ticket:after{display:none}.ticket-side{border:0;border-top:1px dashed #8b704f;padding:18px 0 0;gap:12px}.flight-box,.bus-layout{grid-template-columns:1fr}.answers{grid-template-columns:1fr}.section{padding:75px 5vw;min-height:auto}.stage{min-height:400px}.mascot{width:115px;height:115px}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<section id="gate" class="screen">
+  <div class="panel gate-card">
+    <div class="gate-stars">✦ · ☾ · ✦</div>
+    <div class="eyebrow">A PRIVATE JOURNEY</div>
+    <img class="mascot" src="assets/mascot.jpeg" alt="رحّال صغير">
+    <h1 class="serif">PROJECT <span class="gold">PRIVATE</span></h1>
+    <p class="muted">فيه رحلة مستنياك… بس الأول، كلمة السر؟</p>
+    <form id="passwordForm">
+      <input id="passwordInput" type="password" inputmode="text" placeholder="DD.MM.YYYY" autocomplete="off" aria-label="كلمة السر">
+      <div style="margin-top:17px"><button class="primary" type="submit">Unlock the journey ✦</button></div>
+      <div id="passwordError" class="error" aria-live="polite"></div>
+    </form>
+    <div class="eyebrow">ONLY ONE GUEST · VIP ACCESS</div>
+  </div>
+</section>
+
+<div id="experience" class="hidden">
+<header class="topbar">
+  <div class="brand">✦ PROJECT PRIVATE</div>
+  <nav><a href="#boarding">التذكرة</a><a href="#flight">الرحلة</a><a href="#questions">الأسئلة</a><a href="#concert">الحفلة</a><a href="#memories">الذكريات</a><a href="#letter">الجواب</a></nav>
+</header>
+<main>
+<section id="boarding" class="section">
+ <div class="section-wrap center">
+  <div class="eyebrow">YOUR JOURNEY BEGINS HERE</div><h1 class="section-title">Your Boarding Pass</h1><div class="ornament">✦ ───── ☾ ───── ✦</div>
+  <div class="ticket" dir="ltr">
+   <div>
+    <div class="eyebrow">STARLINE AIRWAYS · BOARDING PASS</div>
+    <h2 class="serif">A Journey<br>Through the Stars</h2>
+    <div class="ticket-info">
+     <div><small>PASSENGER</small><strong>Yassen Mahmoud Nageh</strong></div>
+     <div><small>SEAT</small><strong>VIP</strong></div>
+     <div><small>DATE</small><strong>29 NOV 2026</strong></div>
+     <div><small>BOARDING TIME</small><strong>12:00</strong></div>
+     <div><small>FROM</small><strong>Cairo · CAI</strong></div>
+     <div><small>TO</small><strong>Paris · France</strong></div>
+    </div>
+   </div>
+   <div class="ticket-side">
+    <div class="center" style="font-size:3rem">✈ ☾</div>
+    <div class="center"><div class="eyebrow">SPECIAL GUEST</div><strong class="serif" style="font-size:1.6rem">VIP</strong></div>
+    <div class="barcode"></div><small class="center">Have a pleasant trip to Europe ☺</small>
+   </div>
+  </div>
+  <p style="margin:30px"><button class="primary" onclick="document.querySelector('#flight').scrollIntoView({behavior:'smooth'})">Board the flight ✦</button></p>
+ </div>
+</section>
+
+<section id="flight" class="section">
+ <div class="section-wrap">
+  <div class="center"><div class="eyebrow">CAIRO → PARIS</div><h2 class="section-title">The Flight</h2><div class="ornament">✦ ── ✈ ── ✦</div></div>
+  <div class="flight-box">
+   <div>
+    <div class="flight-story"><img src="assets/mascot.jpeg" class="mascot small" alt=""><p id="flightDialogue">أهلاً بالـ VIP! اربط الحزام، رحلتنا لباريس بدأت.</p></div>
+    <p class="muted">مدة الرحلة الجوية التقريبية: <strong class="gold">4 ساعات و45 دقيقة</strong>. هنعيشها في مشهد مختصر، مش هنستناها بالساعات طبعًا!</p>
+    <div class="progress"><span id="flightProgress"></span></div>
+    <div class="center"><button class="primary" id="startFlight">ابدأ الرحلة</button></div>
+    <p class="center muted" id="flightTimer">جاهز للإقلاع؟</p>
+   </div>
+   <div>
+    <div id="map" aria-label="خريطة مسار القاهرة إلى باريس"></div>
+    <p class="map-note">مسار جغرافي توضيحي من مطار القاهرة إلى مطار شارل ديجول، ثم نكمل إلى باريس.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="questions" class="section">
+ <div class="section-wrap">
+  <div class="center"><div class="eyebrow">A LITTLE MEMORY CHECK</div><h2 class="section-title">Before the next stop…</h2><p class="muted">كل إجابة لازم تكون صح عشان نكمل. مفيش تخطي!</p><div class="ornament">✦ ───── ✦</div></div>
+  <div class="panel question-card" id="questionCard">
+   <div class="question-number" id="questionNumber">QUESTION 01 / 05</div>
+   <h3 id="questionText"></h3>
+   <div id="answerArea" class="answers"></div>
+   <div id="sequenceArea" class="hidden">
+    <p class="muted center">اختار العبارات بالترتيب الصحيح:</p>
+    <div class="sequence-result" id="sequenceResult">ترتيبك هيظهر هنا…</div>
+    <div class="sequence-area" id="sequenceChoices"></div>
+    <div class="center"><button class="primary" id="checkSequence">تأكيد الإجابة</button> <button class="secondary" id="resetSequence">إعادة الترتيب</button></div>
+   </div>
+   <div id="feedback" class="feedback hidden" aria-live="polite"><img src="assets/mascot.jpeg" alt=""><p id="feedbackText"></p></div>
+   <div class="center" style="margin-top:18px"><button id="nextQuestion" class="primary hidden">كمّل ✦</button></div>
+  </div>
+ </div>
+</section>
+
+<section id="concert" class="section">
+ <div class="section-wrap center">
+  <div class="eyebrow">THE GRAND CONCERT</div><h2 class="section-title">A Night of Music</h2><div class="ornament">✦ ───── ♫ ───── ✦</div>
+  <div class="stage">
+   <div class="stage-lights"></div>
+   <div class="stage-content"><div class="spot">✧ ♫ ✧</div><div class="eyebrow">TONIGHT'S SPECIAL PERFORMANCE</div><h3>رامي صبري</h3><p class="serif" style="font-size:1.5rem">إيه سكتّي ليه</p><div class="song-panel"><p>المسرح جاهز… أضيفي ملف الأغنية الصوتي هنا قبل رفع الموقع على GitHub.</p><input type="file" id="songFile" accept="audio/*"><audio id="songPlayer" controls class="hidden" style="width:100%;margin-top:12px"></audio><p class="muted" style="font-size:.75rem">لن نضمّن تسجيلًا محميًا تلقائيًا؛ استخدمي ملفًا تملكين حق مشاركته.</p></div></div>
+  </div>
+  <p class="muted">لما العرض يخلص، الأوتوبيس الفرنسي مستنيك.</p>
+  <button class="primary" onclick="document.querySelector('#bus').scrollIntoView({behavior:'smooth'})">اتجه للأوتوبيس ✦</button>
+ </div>
+</section>
+
+<section id="bus" class="section">
+ <div class="section-wrap">
+  <div class="center"><div class="eyebrow">NEXT STOP · PARIS</div><h2 class="section-title">The Paris Bus</h2><div class="ornament">✦ ───── ☾ ───── ✦</div></div>
+  <div class="bus-layout">
+   <div><div class="flight-story"><img src="assets/mascot.jpeg" class="mascot small" alt=""><p id="busDialogue">الأوتوبيس اتحرك! وجهتنا متحف اللوفر.</p></div><p class="muted">مدة الرحلة التقديرية داخل باريس: حوالي <strong class="gold">12 دقيقة</strong> في ظروف حركة مناسبة. المشهد هيتحرك بشكل مختصر.</p><div class="progress"><span id="busProgress"></span></div><button class="primary" id="startBus">يلا نتحرك</button><p class="muted" id="busTimer">مستنيين إشارة السواق…</p></div>
+   <div><div id="busMap" style="height:390px;border:1px solid #cfaf8370;border-radius:18px"></div><p class="map-note">مسار توضيحي داخل باريس من منطقة أوبرا غارنييه إلى متحف اللوفر.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="memories" class="section">
+ <div class="section-wrap">
+  <div class="center"><div class="eyebrow">A LITTLE ARCHIVE</div><h2 class="section-title">Memory Timeline</h2><p class="muted">محطات من حكاية بقالها سنتين…</p><div class="ornament">✦ ───── ☾ ───── ✦</div></div>
+  <div class="timeline">
+   <article class="memory"><small>01 · THE BEGINNING</small><h3>أول الحكاية</h3><p class="muted">من المبادرة… لبداية معرفة ماكنتش متوقعة.</p></article>
+   <article class="memory"><small>02 · THE NICKNAMES</small><h3>نسانيسو، نثانيثو، يويو…</h3><p class="muted">أسماء كتير، وكل مرة اسم أغرب من اللي قبله.</p></article>
+   <article class="memory"><small>03 · THE LOLLIPOP</small><h3>المصاصة 🍭</h3><p class="muted">ذكرى صغيرة بس لسه بتضحّك كل ما نفتكرها.</p></article>
+   <article class="memory"><small>04 · TWO YEARS</small><h3>سنتين أخوات وزمايل</h3><p class="muted">تفاصيل يومية كتير… ولسه الحكاية مكملة.</p></article>
+  </div>
+  <div class="center"><button class="primary" onclick="document.querySelector('#letter').scrollIntoView({behavior:'smooth'})">وصلنا للجواب ✦</button></div>
+ </div>
+</section>
+
+<section id="letter" class="section">
+ <div class="section-wrap center">
+  <div class="eyebrow">THE LAST LITTLE STOP</div><h2 class="section-title">A Letter, Just for You</h2><div class="ornament">✦ ───── ☾ ───── ✦</div>
+  <div class="center" style="margin-bottom:20px"><button class="primary" id="openLetter">افتح الجواب ✦</button></div>
+  <article id="letterPaper" class="letter hidden" dir="rtl">
+   <h2>من كونثي</h2>
+   <p>وصلنا لأهم يوم و أهم نقطة ..
+وصلنا لأهم يوم و اهم نقطة .. مش عارفة ابدأ منين ولا اقول ايه بس يعني كل سنة وانت طيب .. اه بس كدا .. ممكن عشان متغاظة منك او ممكن عشان مش عارفة ارتب كلامي زي كل مرة و اقوله برغم ان دا معمول من بدري .. ف الاول مكنتش اتخيل اننا نوصل لهنا ، لو كان حد جه قاللي ان هيجي وقت ابقا فيه طالبة ف مبادرة مهمة و ان المبادرة دي هتعرفني ع شخص هيبقا الاخ الكبير اللي هرجعله دايما و احكيله و اقولله كل حاجة عن يومي بتفاصيله المملة جدًااااا اللي بردو لحد دلوقتي معرفش مزهقتش منها ازاي بس ما علينا بس انت فجأة بقا اسمك نسانيسو و فجأة تانية نثانيثو و يويو و ياثين و عمو و باندتي و فراولتي و حاجات كتير متعدش بقاا .. مش قادرة افهم اننا بقالنا سنتين اخوات و زمايل .. انا اللي كنت مبعرفش انطق حرف قدام ولد جيت و اديتك مصاصة و بشاركك أي حاجة جديدة بتعلمها و بعملها .
+بس وقتها فهمت انك فعلا بقيت شخص مهم جدا عندي حتى لو كنت متغاظة منك و حتى لو كنت انت عمو الرخم اللي كان عايزني اصحى الساعة 9 الصبح و صحي الساعة 11 اصلا</p>
+   <div class="signature">من كونثي ✦</div>
+  </article>
+ </div>
+</section>
+<footer class="footer">Made with stardust · PROJECT PRIVATE ✦</footer>
+</main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const SECRET_PASSWORD = "29112009";
+const $ = id => document.getElementById(id);
+$("passwordForm").addEventListener("submit", e=>{
+ e.preventDefault();
+ // Accept 29.11.2009, 29/11/2009, 29-11-2009, or 29112009.
+ const enteredPassword = $("passwordInput").value.replace(/\\D/g, "");
+ if(enteredPassword===SECRET_PASSWORD){
+  $("passwordError").textContent="";
+  $("gate").classList.add("hidden");
+  $("experience").classList.remove("hidden");
+  window.scrollTo(0,0);
+  setTimeout(initMaps,250);
+ }else{
+  $("passwordError").textContent="تؤ تؤ… محاولة كمان ✦";
+  $("passwordInput").value="";
+  $("passwordInput").focus();
+ }
+});
+function initMaps(){
+ if(!window.L || window.mapsReady)return;window.mapsReady=true;
+ const cairo=[30.1219,31.4056],cdg=[49.0097,2.5479],opera=[48.8719,2.3316],vendome=[48.8675,2.3294],rivoli=[48.8635,2.332],louvre=[48.8606,2.3376];
+ const base={zoomControl:true,scrollWheelZoom:false};
+ const m=L.map('map',base).setView([40,17],3);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18}).addTo(m);
+ L.marker(cairo).addTo(m).bindPopup('Cairo International Airport · Egypt');
+ L.marker(cdg).addTo(m).bindPopup('Charles de Gaulle Airport · France');
+ L.polyline([cairo,cdg],{color:'#b58a52',weight:4,dashArray:'9 10'}).addTo(m);
+ const b=L.map('busMap',base).setView([48.866,2.333],14);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18}).addTo(b);
+ L.marker(opera).addTo(b).bindPopup('Palais Garnier · نقطة انطلاق الأوتوبيس');
+ L.marker(louvre).addTo(b).bindPopup('Musée du Louvre · الوجهة');
+ L.polyline([opera,vendome,rivoli,louvre],{color:'#b58a52',weight:5}).addTo(b);
+ setTimeout(()=>{m.invalidateSize();b.invalidateSize()},300);
+}
+const mascotLine = (text,good=false)=>{const box=$("feedback");box.className="feedback "+(good?"good":"bad");box.classList.remove("hidden");$("feedbackText").textContent=text;};
+const questions=[
+ {q:"إذا كانت حياتي… فهي الـ…",opts:["رواية، الفصل الأكثر جمالًا","حكاية، المشهد الأكثر هدوءًا","رواية، البداية الأكثر غرابة","قصة، الفصل الأخير"],correct:0},
+ {q:"عند حدوث شجار مع الأهل، مقولتي هي…",opts:["معلش، هما أهلك في الآخر","معلش زي اهلك","حاولي تعدّيها وخلاص","كل بيت وليه ظروفه"],correct:1},
+ {q:"مشروب خطر بالنسبة لك؟ وذكرى بيننا نضحك كلما تذكرناها؟",opts:["الشاي بلبن + المصاصة","القهوة + الهدية","الشاي السادة + الصورة","العصير + أول مقابلة"],correct:0},
+ {q:"طريقة الوعد اللي جربتها قبل كده… رتّب الخطوات!",sequence:["اوعدني بكدا","شاور لقلبك","شاور","شاور عليه","أديك وعدت"]},
+ {q:"كام مرة قلت: هقطعلك لسانك؟",opts:["مرة أو اتنين بالكتير","كل ما نتخانق","متعدش يا چيمي","عدد لا نهائي"],correct:2}
+];
+let qi=0,seq=[];
+function renderQuestion(){
+ const q=questions[qi];$("questionNumber").textContent=`QUESTION 0${qi+1} / 05`;$("questionText").textContent=q.q;
+ $("answerArea").innerHTML="";$("feedback").classList.add("hidden");$("nextQuestion").classList.add("hidden");
+ if(q.sequence){
+  $("answerArea").classList.add("hidden");$("sequenceArea").classList.remove("hidden");seq=[];
+  $("sequenceResult").textContent="ترتيبك هيظهر هنا…";$("sequenceChoices").innerHTML="";
+  q.sequence.forEach((v,i)=>{const btn=document.createElement("button");btn.className="chip";btn.textContent=v;btn.onclick=()=>{if(seq.includes(i))return;seq.push(i);btn.classList.add("selected");$("sequenceResult").textContent=seq.map(x=>q.sequence[x]).join("  ←  ");};$("sequenceChoices").appendChild(btn)});
+ }else{
+  $("sequenceArea").classList.add("hidden");$("answerArea").classList.remove("hidden");
+  q.opts.forEach((v,i)=>{const btn=document.createElement("button");btn.className="answer";btn.textContent=v;btn.onclick=()=>checkAnswer(i);$("answerArea").appendChild(btn)});
+ }
+}
+function checkAnswer(i){if(i===questions[qi].correct){mascotLine("يتي يتي! إجابة مظبوطة ✦",true);$("nextQuestion").classList.remove("hidden")}else{mascotLine("تؤ تؤ… محاولة كمان، وهطلعلك من الشاشة!")} }
+$("checkSequence").onclick=()=>{const correct=questions[qi].sequence.map((_,i)=>i);if(seq.length===correct.length&&seq.every((v,i)=>v===correct[i])){mascotLine("يتي يتي! ترتيب مظبوط ✦",true);$("nextQuestion").classList.remove("hidden")}else{mascotLine("تؤ تؤ… مش كده! جرّب تاني، وهطلعلك من الشاشة!");}};
+$("resetSequence").onclick=()=>renderQuestion();
+$("nextQuestion").onclick=()=>{if(qi<questions.length-1){qi++;renderQuestion()}else{$("questionCard").innerHTML='<div class="center"><img src="assets/mascot.jpeg" class="mascot" alt=""><h2 class="section-title">يتي يتي! خلصت الأسئلة ✦</h2><p>التذكرة اتأكدت… يلا على الحفلة!</p><button class="primary" id="goConcert">روح الحفلة</button></div>';}};
+renderQuestion();
+document.addEventListener("click", e=>{if(e.target && e.target.id==="goConcert"){document.querySelector("#concert").scrollIntoView({behavior:"smooth"});}});
+
+function runTravel(progressId,timerId,dialogueId,buttonId,duration,lines){
+ let started=false;$(buttonId).onclick=()=>{if(started)return;started=true;$(buttonId).disabled=true;let elapsed=0;const total=duration;const tick=setInterval(()=>{elapsed++;$(progressId).style.width=(elapsed/total*100)+'%';$(timerId).textContent=`${elapsed} / ${total} ثانية من مشهد الرحلة`;if(lines[elapsed])$(dialogueId).textContent=lines[elapsed];if(elapsed>=total){clearInterval(tick);$(timerId).textContent="وصلنا بالسلامة! ✦";$(dialogueId).textContent=lines.end;$(buttonId).textContent="وصلنا ✦";}},1000);};
+}
+runTravel("flightProgress","flightTimer","flightDialogue","startFlight",24,{
+ 3:"أول مرة تسافر أوروبا؟ ولا أعتبر نفسي المرشد السياحي الرسمي؟",
+ 8:"على فكرة، الطيارة ليه مبتحبش تحكي أسرار؟ عشان كل حاجة فيها بتطلع على ارتفاع عالي!",
+ 10:"خيو خيو خيو… ضحكت ولا أقول واحدة أبايخ؟",
+ 16:"بص من الشباك… قربنا من أوروبا، والغيوم عاملة زي مخدات.",
+ end:"مرحبًا بيك في فرنسا! شنطتك معاك؟ يلا نكمل."
+});
+runTravel("busProgress","busTimer","busDialogue","startBus",16,{
+ 3:"الأوتوبيس الفرنسي اتحرك… يا رب السواق ميكونش حافظ الطريق من الذاكرة بس.",
+ 7:"عارف ليه الأوتوبيس مبيحبش يستعجل؟ عشان عنده محطات كتير في حياته!",
+ 9:"خيو خيو خيو… خلاص دي آخر نكتة، غالبًا.",
+ 13:"شايف المبنى اللي قدامنا؟ دي محطة اللوفر.",
+ end:"وصلنا متحف اللوفر! المحطة الأخيرة قبل الجواب."
+});
+$("songFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const player=$("songPlayer");player.src=URL.createObjectURL(f);player.classList.remove("hidden");});
+$("openLetter").onclick=()=>{$("letterPaper").classList.remove("hidden");$("letterPaper").scrollIntoView({behavior:"smooth",block:"center"});$("openLetter").textContent="الجواب اتفتح ✦";$("openLetter").disabled=true;};
+</script>
+</body>
+</html>
